@@ -11,15 +11,20 @@
     "type": "git",
     "url": "git+https://github.com/yourname/fragments.git"
   },
-  "author": "Your Name",
+  "author": "Deep Patel",
   "license": "UNLICENSED",
   "devDependencies": {
     "eslint": "^8.40.0",
     "prettier": "2.8.8"
   },
   "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
     "pino": "^8.14.1",
     "pino-http": "^8.3.3",
-    "pino-pretty": "^10.0.0"
+    "pino-pretty": "^10.0.0",
+    "stoppable": "^1.1.0"
   }
 }
