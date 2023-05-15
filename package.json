@@ -11,5 +11,8 @@
     "url": "git+https://github.com/yourname/fragments.git"
   },
   "author": "Your Name",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "2.8.8"
+  }
 }
