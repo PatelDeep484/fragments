@@ -31,15 +31,13 @@ app.use(cors());
 // Use gzip/deflate compression middleware
 app.use(compression());
 
-// Use gzip/deflate compression middleware
-app.use(compression());
-
 // Set up our passport authentication middleware
 passport.use(authenticate.strategy());
 app.use(passport.initialize());
 
 // Define our routes
 app.use('/', require('./routes'));
+
 // Define a simple health check route. If the server is running
 // we'll respond with a 200 OK.  If not, the server isn't healthy.
 // modifications to src/app.js
