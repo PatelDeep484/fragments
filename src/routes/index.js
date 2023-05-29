@@ -9,7 +9,7 @@ const { version, author } = require('../../package.json');
 const router = express.Router();
 
 // Our authentication middleware
-const { authenticate } = require('../authentication');
+const { authenticate } = require('../auth');
 
 /**
  * Expose all of our API routes on /v1/* to include an API version.
