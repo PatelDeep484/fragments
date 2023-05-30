@@ -1,3 +1,19 @@
+# .github/workflows/ci.yml
+
+# Continuous Integration (CI) Workflow
+name: ci
+
+# This workflow will run whenever we push commits to the `main` branch, or
+# whenever there's a pull request to the `main` branch. See:
+# https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#on
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
 # modifications to .github/workflows/ci.yml
 
 jobs:
