@@ -2,6 +2,8 @@
 
 const express = require('express');
 
+const { createSuccessResponse } = require('../response');
+
 // version and author from package.json
 const { version, author } = require('../../package.json');
 
@@ -29,13 +31,12 @@ router.get('/', (req, res) => {
   // Client's shouldn't cache this response (always request it fresh)
   res.setHeader('Cache-Control', 'no-cache');
   // Send a 200 'OK' response
-  res.status(200).json({
-    status: 'ok',
+  const data = {
     author,
-    // Use your own GitHub URL for this...
     githubUrl: 'https://github.com/yourname/fragments',
     version,
-  });
+  };
+  res.status(200).json(createSuccessResponse(data));
 });
 
 module.exports = router;
