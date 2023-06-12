@@ -1,24 +1,14 @@
-// src/auth/basic-auth.js
+// src/auth/index.js
 
-// Configure HTTP Basic Auth strategy for Passport, see:
-// https://github.com/http-auth/http-auth-passport
-
-const auth = require('http-auth');
-const passport = require('passport');
-const authPassport = require('http-auth-passport');
-
-// We expect HTPASSWD_FILE to be defined.
-if (!process.env.HTPASSWD_FILE) {
-  throw new Error('missing expected env var: HTPASSWD_FILE');
+// Prefer Amazon Cognito
+if (process.env.AWS_COGNITO_POOL_ID && process.env.AWS_COGNITO_CLIENT_ID) {
+  module.exports = require('./cognito');
 }
-
-module.exports.strategy = () =>
-  // For our Passport authentication strategy, we'll look for a
-  // username/password pair in the Authorization header.
-  authPassport(
-    auth.basic({
-      file: process.env.HTPASSWD_FILE,
-    })
-  );
-
-module.exports.authenticate = () => passport.authenticate('http', { session: false });
+// Also allow for an .htpasswd file to be used, but not in production
+else if (process.env.HTPASSWD_FILE && process.NODE_ENV !== 'production') {
+  module.exports = require('./basic-auth');
+}
+// In all other cases, we need to stop now and fix our config
+else {
+  throw new Error('missing env vars: no authorization configuration found');
+}
