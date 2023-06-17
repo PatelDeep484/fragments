@@ -1,34 +1,30 @@
-const logger = require('../../logger');
-const { Fragment } = require('../../model/fragment');
 const { createSuccessResponse, createErrorResponse } = require('../../response');
-require('dotenv').config();
+const { Fragment } = require('../../model/fragment');
 
-module.exports = async (req, res) => {
-  if (!req) {
-    res.status(400).json(createErrorResponse(400, 'e.message'));
-  }
-  const data = req.body;
-  const user = req.user;
+const createFragment = async (req, res) => {
+  const { headers } = req;
+  const contentType = headers['content-type'];
 
-  logger.debug(user, 'POST request: user');
-  logger.debug(data, 'POST request: fragment buffer');
+  if (Fragment.isSupportedType(contentType) || Buffer.isBuffer(req.body)) {
+    const ownerId = req.user;
+    const fragment = new Fragment({ ownerId, type: contentType });
 
-  try {
-    const fragment = new Fragment({ ownerId: req.user, type: req.get('Content-Type') });
-    await fragment.save();
-    await fragment.setData(req.body);
+    try {
+      await fragment.save();
+      await fragment.setData(req.body);
 
-    logger.debug({ fragment }, 'New fragment created');
+      const apiUrl = process.env.API_URL;
+      const locationHeader = `${apiUrl}/v1/fragments/${fragment.id}`;
 
-    res.setHeader('Location', process.env.API_URL + '/v1/fragments/' + fragment.id);
-    res.status(201).json(
-      createSuccessResponse({
-        status: 'ok',
-        fragment: fragment,
-      })
-    );
-  } catch (e) {
-    logger.warn(e.message, 'Error posting fragment');
-    res.status(415).json(createErrorResponse(415, e.message));
+      res.set('Location', locationHeader);
+      res.status(201).json(createSuccessResponse({ fragment }));
+    } catch (err) {
+      throw new Error(err);
+    }
+  } else {
+    const unsupportedError = createErrorResponse(415, 'Type not supported');
+    res.status(415).json(unsupportedError);
   }
 };
+
+module.exports = createFragment;

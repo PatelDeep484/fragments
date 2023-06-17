@@ -20,5 +20,15 @@ describe('GET /v1/fragments', () => {
     expect(Array.isArray(res.body.fragments)).toBe(true);
   });
 
+  test('when expand = 1, returns all fragments', async () => {
+    const res = await request(app)
+      .get('/v1/fragments?expand=1')
+      .auth('user1@email.com', 'password1');
+    console.log('res', JSON.stringify(res));
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe('ok');
+    expect(Array.isArray(res.body.fragments)).toBe(true);
+  });
+
   // TODO: we'll need to add tests to check the contents of the fragments array later
 });
