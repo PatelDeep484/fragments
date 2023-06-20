@@ -33,7 +33,7 @@ router.get('/', (req, res) => {
   // Send a 200 'OK' response
   const data = {
     author,
-    githubUrl: 'https://github.com/yourname/fragments',
+    githubUrl: 'https://github.com/PatelDeep484/fragments',
     version,
   };
   res.status(200).json(createSuccessResponse(data));
