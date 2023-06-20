@@ -3,6 +3,15 @@ const request = require('supertest');
 const app = require('../../src/app');
 
 describe('GET /fragments/:id', () => {
+  test('unauthenticated requests are denied', () =>
+    request(app).get('/v1/fragments/007').expect(401));
+
+  test('incorrect credentials are denied', () =>
+    request(app)
+      .get('/v1/fragments/007')
+      .auth('invalid@email.com', 'incorrect_password')
+      .expect(401));
+
   test('returns the fragment with the specified id', async () => {
     const postRes = await request(app)
       .post('/v1/fragments')
