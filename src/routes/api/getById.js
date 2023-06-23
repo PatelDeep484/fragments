@@ -13,6 +13,7 @@ module.exports = async (req, res) => {
   try {
     const fragment = await Fragment.byId(req.user, fragmentId);
     var fragmentData = await fragment.getData();
+    res.set('Content-Type', fragment.mimeType);
     res.status(200).json(createSuccessResponse({ fragmentData }));
   } catch (err) {
     res.status(404).json(createErrorResponse(404, 'Fragment not found'));

@@ -3,7 +3,7 @@
 const { randomUUID } = require('crypto');
 // Use https://www.npmjs.com/package/content-type to create/parse Content-Type headers
 const contentType = require('content-type');
-const logger = require('../logger');
+//const logger = require('../logger');
 
 // Functions for working with fragment metadata/data using our DB
 const {
@@ -27,12 +27,12 @@ class Fragment {
       this.ownerId = ownerId;
     } else {
       if (!ownerId) {
-        logger.Error('The ownerID is not valid');
+        throw new Error('The ownerID is not valid');
       }
       if (!type) {
-        logger.Error(`Fragment missing type not found!`);
+        throw new Error(`Fragment missing type not found!`);
       } else {
-        logger.Error(`Fragment type or size is wrong`);
+        throw new Error(`Fragment type or size is wrong`);
       }
     }
 
@@ -49,11 +49,11 @@ class Fragment {
     }
 
     if (!type) {
-      logger.Error(`Fragment missing type not found!`);
+      throw new Error(`Fragment missing type not found!`);
     } else if (Fragment.isSupportedType(type)) {
       this.type = type;
     } else {
-      logger.Error(`Fragment type or size is wrong`);
+      throw new Error(`Fragment type or size is wrong`);
     }
 
     if (typeof size === 'number' && size >= 0) {
@@ -62,7 +62,7 @@ class Fragment {
       if (!size) {
         this.size = 0;
       } else {
-        logger.Error(`Fragment type or size is wrong`);
+        throw new Error(`Fragment type or size is wrong`);
       }
     }
   }
@@ -87,7 +87,7 @@ class Fragment {
     // TODO
     const fragment = await readFragment(ownerId, id);
     if (!fragment) {
-      logger.Error(`Fragment not found`);
+      throw new Error(`Fragment not found`);
     }
     return fragment;
   }
@@ -129,7 +129,7 @@ class Fragment {
    */
   async setData(data) {
     if (!data) {
-      logger.Error(`Data cannot be empty.`);
+      throw new Error(`Data cannot be empty.`);
     }
 
     this.updated = new Date().toISOString();
@@ -163,7 +163,9 @@ class Fragment {
    */
   get formats() {
     // TODO
-    return new Array(this.type.split(';')[0]);
+    //return new Array(this.type.split(';')[0]);
+    const parsedContentType = contentType.parse(this.type);
+    return [parsedContentType.type];
   }
 
   /**
