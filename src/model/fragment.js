@@ -175,10 +175,26 @@ class Fragment {
    */
   static isSupportedType(value) {
     // TODO
-    if (value == 'text/plain' || value == 'text/plain; charset=utf-8') {
-      return true;
+    // create a array of with 'text/plain', 'text/plain; charset=utf-8', 'text/markdown' , 'text/html' , 'application/json' and return true id value is equal to any of them or else return flase
+    
+    const contentTypes = [
+      'text/plain',
+      'text/plain; charset=utf-8',
+      'text/markdown',
+      'text/html',
+      'application/json'
+    ];
+  
+    if (contentTypes.includes(value) == true){
+      return true
     }
-    return false;
+    return false
+
+
+    // if (value == 'text/plain' || value == 'text/plain; charset=utf-8' || value == 'application/json') {
+    //   return true;
+    // }
+    // return false;
   }
 }
 

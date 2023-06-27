@@ -17,7 +17,7 @@ const createFragment = async (req, res) => {
       await fragment.setData(req.body);
 
       const apiUrl = process.env.API_URL;
-      const locationHeader = `${apiUrl}/v1/fragments/${fragment.id}`;
+      const locationHeader = `http://${apiUrl}/v1/fragments/${fragment.id}`;
 
       res.set('Location', locationHeader);
       res.status(201).json(createSuccessResponse({ fragment }));
