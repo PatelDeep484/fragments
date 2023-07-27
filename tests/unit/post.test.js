@@ -13,25 +13,29 @@ describe('POST /v1/fragments', () => {
     const res = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'text/plain');
+      .set('content-type', 'text/plain')
+      .send('data');
     expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe('ok');
   });
+
   test('application/json content type is allowed', async () => {
     const res = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
       .set('content-type', 'application/json')
+      .send('data');
+
     expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe('ok');
-
+    expect(res.text.includes('text/plain'));
   });
   test('unsupported type gives 415 error', async () => {
     const res = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'image/json')
-      .send({ fragment: 'fragment' });
+      .set('content-type', 'audio/mpeg')
+      .send('fragment');
     expect(res.statusCode).toBe(415);
   });
 });

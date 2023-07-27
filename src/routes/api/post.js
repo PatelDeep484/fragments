@@ -1,10 +1,11 @@
 const { createSuccessResponse, createErrorResponse } = require('../../response');
 const { Fragment } = require('../../model/fragment');
+const logger = require('../../logger');
 
 const createFragment = async (req, res) => {
   const { headers } = req;
   const contentType = headers['content-type'];
-  if (Fragment.isSupportedType(contentType) == false && Buffer.isBuffer(req.body) == false) {
+  if (Fragment.isSupportedType(contentType) == false || Buffer.isBuffer(req.body) == false) {
     const unsupportedError = createErrorResponse(415, 'Type not supported');
     return res.status(415).send(unsupportedError);
   } else {
@@ -14,6 +15,7 @@ const createFragment = async (req, res) => {
 
     try {
       await fragment.save();
+      logger.debug('=====================================');
       await fragment.setData(req.body);
 
       const apiUrl = process.env.API_URL;
@@ -22,7 +24,7 @@ const createFragment = async (req, res) => {
       res.set('Location', locationHeader);
       res.status(201).json(createSuccessResponse({ fragment }));
     } catch (err) {
-      const errorResponse = createErrorResponse(500, 'Failed to create fragment');
+      const errorResponse = createErrorResponse(500, err);
       res.status(500).json(errorResponse);
     }
   }

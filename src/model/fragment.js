@@ -14,6 +14,7 @@ const {
   listFragments,
   deleteFragment,
 } = require('./data');
+const logger = require('../logger');
 
 class Fragment {
   constructor({ id, ownerId, created, updated, type, size = 0 }) {
@@ -128,14 +129,18 @@ class Fragment {
    * @returns Promise<void>
    */
   async setData(data) {
-    if (!data) {
-      throw new Error(`Data cannot be empty.`);
+    if (Buffer.isBuffer(data) == false) {
+      logger.debug('data is thrown ======================================================');
+      throw new Error('data is not a Buffer');
     }
-
-    this.updated = new Date().toISOString();
-    this.size = data.length;
-    await writeFragment(this);
-    return writeFragmentData(this.ownerId, this.id, data);
+    this.size = Buffer.byteLength(data);
+    await this.save();
+    try {
+      return await writeFragmentData(this.ownerId, this.id, data);
+    } catch (err) {
+      logger.debug('data is thrown ======================================================');
+      throw new Error('Error setting fragments');
+    }
   }
 
   /**
@@ -164,10 +169,21 @@ class Fragment {
   get formats() {
     // TODO
     //return new Array(this.type.split(';')[0]);
-    const parsedContentType = contentType.parse(this.type);
-    return [parsedContentType.type];
+    // const parsedContentType = contentType.parse(this.type);
+    // return [parsedContentType.type];
+    switch (this.mimeType) {
+      case 'text/plain':
+        return ['text/plain'];
+      case 'text/markdown':
+        return ['text/plain', 'text/markdown', 'text/html'];
+      case 'text/html':
+        return ['text/plain', 'text/html'];
+      case 'application/json':
+        return ['application/json', 'text/plain'];
+      default:
+        return ['notSupported/ext'];
+    }
   }
-
   /**
    * Returns true if we know how to work with this content type
    * @param {string} value a Content-Type value (e.g., 'text/plain' or 'text/plain: charset=utf-8')
@@ -175,26 +191,19 @@ class Fragment {
    */
   static isSupportedType(value) {
     // TODO
-    // create a array of with 'text/plain', 'text/plain; charset=utf-8', 'text/markdown' , 'text/html' , 'application/json' and return true id value is equal to any of them or else return flase
-    
+
     const contentTypes = [
       'text/plain',
       'text/plain; charset=utf-8',
       'text/markdown',
       'text/html',
-      'application/json'
+      'application/json',
     ];
-  
-    if (contentTypes.includes(value) == true){
-      return true
+
+    if (contentTypes.includes(value) == true) {
+      return true;
     }
-    return false
-
-
-    // if (value == 'text/plain' || value == 'text/plain; charset=utf-8' || value == 'application/json') {
-    //   return true;
-    // }
-    // return false;
+    return false;
   }
 }
 
