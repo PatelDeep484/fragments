@@ -32,14 +32,14 @@ module.exports = async (req, res) => {
       if (exten === 'text/html' && fragment.mimeType === 'text/markdown') {
         const convertedData = markdownIt.render(fragmentData.toString());
         logger.debug(convertedData);
-        res.status(200).set('content-type', exten).send(convertedData);
+        res.status(200).set('Content-Type', exten).send(convertedData);
       } else {
         res.status(415).json(createErrorResponse(415, 'Unsupported extension conversation'));
         //res.set('content-type', exten).status(200).json(createSuccessResponse(fragmentData));
       }
     } else {
-      logger.debug(fragmentData + '=====================================================');
-      res.set('content-type', fragment.mimeType).status(200).send(fragmentData);
+      logger.debug(fragment.type + '=====================================================');
+      res.set('Content-Type', fragment.mimeType).status(200).send(fragmentData);
     }
   } catch (err) {
     res.status(404).json(createErrorResponse(404, 'Fragment not found'));

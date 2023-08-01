@@ -16,7 +16,7 @@ describe('GET /fragments/:id', () => {
     const postRes = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'text/plain')
+      .set('Content-Type', 'text/plain')
       .send('This is a fragment');
 
     const fragmentId = postRes.body.fragment.id;
@@ -27,13 +27,14 @@ describe('GET /fragments/:id', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.text).toContain('This is a fragment');
+    expect(res.type).toEqual('text/plain');
   });
 
   test('successful conversion of markdown(.md) extension to html', async () => {
     const postRes = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'text/markdown')
+      .set('Content-Type', 'text/markdown')
       .send('# text');
 
     const fragmentId = postRes.body.fragment.id;
@@ -61,7 +62,7 @@ describe('GET /fragments/:id', () => {
     const postRes = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'text/plain');
+      .set('Content-Type', 'text/plain');
 
     const fragmentId = postRes.body.fragment.id;
 

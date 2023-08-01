@@ -13,7 +13,7 @@ describe('POST /v1/fragments', () => {
     const res = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'text/plain')
+      .set('Content-Type', 'text/plain')
       .send('data');
     expect(res.statusCode).toBe(201);
     expect(res.body.status).toBe('ok');
@@ -23,7 +23,7 @@ describe('POST /v1/fragments', () => {
     const res = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'application/json')
+      .set('Content-Type', 'application/json')
       .send('data');
 
     expect(res.statusCode).toBe(201);
@@ -34,7 +34,7 @@ describe('POST /v1/fragments', () => {
     const res = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'audio/mpeg')
+      .set('Content-Type', 'audio/mpeg')
       .send('fragment');
     expect(res.statusCode).toBe(415);
   });

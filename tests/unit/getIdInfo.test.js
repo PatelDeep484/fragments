@@ -19,7 +19,7 @@ describe('GET /fragments/:id/info', () => {
     const postRes = await request(app)
       .post('/v1/fragments')
       .auth('user1@email.com', 'password1')
-      .set('content-type', 'text/plain');
+      .set('Content-Type', 'text/plain');
     const id = postRes.body.fragment.id;
 
     const res = await request(app)
