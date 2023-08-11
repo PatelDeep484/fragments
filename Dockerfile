@@ -46,7 +46,7 @@ COPY --from=dependencies /app /app
 COPY ./src ./src
 
 # Copy our HTPASSWD file
-COPY ./tests/.htpasswd ./tests/.htpasswd
+COPY tests/.htpasswd tests/.htpasswd
 
 # Start the container by running our server
 CMD ["npm", "start"]
