@@ -3,6 +3,7 @@
 const express = require('express');
 
 const { createSuccessResponse } = require('../response');
+const { hostname } = require('os');
 
 // version and author from package.json
 const { version, author } = require('../../package.json');
@@ -35,6 +36,7 @@ router.get('/', (req, res) => {
     author,
     githubUrl: 'https://github.com/PatelDeep484/fragments',
     version,
+    hostname: hostname(),
   };
   res.status(200).json(createSuccessResponse(data));
 });
