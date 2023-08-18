@@ -111,6 +111,7 @@ const streamToBuffer = (stream) =>
 // https://github.com/awsdocs/aws-sdk-for-javascript-v3/blob/main/doc_source/s3-example-creating-buckets.md#getting-a-file-from-an-amazon-s3-bucket
 async function readFragmentData(ownerId, id) {
   // Create the PUT API params from our details
+  logger.info(`Reading fragment data for ${id}`);
   const params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
     // Our key will be a mix of the ownerID and fragment id, written as a path
@@ -131,7 +132,6 @@ async function readFragmentData(ownerId, id) {
     throw new Error('unable to read fragment data');
   }
 }
-
 // Get a list of fragments, either ids-only, or full Objects, for the given user.
 // Returns a Promise<Array<Fragment>|Array<string>|undefined>
 async function listFragments(ownerId, expand = false) {
@@ -173,37 +173,32 @@ async function listFragments(ownerId, expand = false) {
 }
 
 async function deleteFragment(ownerId, id) {
-  // Create the DELETE API params for S3 data
-  const s3Params = {
+  // Create the PUT API params from our details
+  const params = {
     Bucket: process.env.AWS_S3_BUCKET_NAME,
+    // Our key will be a mix of the ownerID and fragment id, written as a path
     Key: `${ownerId}/${id}`,
   };
 
-  // Create a DELETE Object command for S3
-  const s3Command = new DeleteObjectCommand(s3Params);
+  const params2 = {
+    TableName: process.env.AWS_DYNAMODB_TABLE_NAME,
+    Key: { ownerId, id },
+  };
+
+  // Create a DELETE Object command to send to S3
+  const command = new DeleteObjectCommand(params);
+
+  // Create a DELETE command to send to DynamoDB
+  const command2 = new DeleteCommand(params2);
 
   try {
-    // Use the S3 client to delete the object from S3
-    await s3Client.send(s3Command);
-
-    // Create the DELETE API params for DynamoDB metadata
-    const ddbParams = {
-      TableName: process.env.AWS_DYNAMODB_TABLE_NAME,
-      Key: { ownerId, id },
-    };
-
-    // Create a DELETE command for DynamoDB
-    const ddbCommand = new DeleteCommand(ddbParams);
-
-    // Use the DynamoDB Document Client to delete the metadata from DynamoDB
-    await ddbDocClient.send(ddbCommand);
-
-    // Return a success message or any other necessary information
-    return { message: 'Fragment deleted successfully' };
+    // Use our client to send the command
+    await s3Client.send(command);
+    await ddbDocClient.send(command2);
   } catch (err) {
-    const { Bucket, Key } = s3Params;
+    const { Bucket, Key } = params;
     logger.error({ err, Bucket, Key }, 'Error deleting fragment data from S3');
-    throw new Error('Unable to delete fragment data');
+    throw new Error('unable to delete fragment data');
   }
 }
 
