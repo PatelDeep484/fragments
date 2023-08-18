@@ -172,43 +172,6 @@ async function listFragments(ownerId, expand = false) {
   }
 }
 
-// Delete a fragment's metadata and data from memory db. Returns a Promise
-// function deleteFragment(ownerId, id) {
-//   return Promise.all([
-//     // Delete metadata
-//     metadata.del(ownerId, id),
-//     // Delete data
-//     data.del(ownerId, id),
-//   ]);
-// }
-// async function deleteFragment(ownerId, id) {
-//   // Create the DELETE API params from our details
-//   const params = {
-//     Bucket: process.env.AWS_S3_BUCKET_NAME,
-//     // Our key will be a mix of the ownerId and fragment id, written as a path
-//     Key: `${ownerId}/${id}`,
-//   };
-
-//   // Create a DELETE Object command to send to S3
-//   const command = new DeleteObjectCommand(params);
-
-//   try {
-//     // Use our client to send the command to delete the object from S3
-//     await s3Client.send(command);
-
-//     // Delete metadata and data from the in-memory db
-//     // return Promise.all([
-//     //   // Delete metadata
-//     //   metadata.del(ownerId, id),
-//     //   // Delete data
-//     //   data.del(ownerId, id),
-//     // ]);
-//   } catch (err) {
-//     const { Bucket, Key } = params;
-//     logger.error({ err, Bucket, Key }, 'Error deleting fragment data from S3');
-//     throw new Error('unable to delete fragment data');
-//   }
-// }
 async function deleteFragment(ownerId, id) {
   // Create the DELETE API params for S3 data
   const s3Params = {
