@@ -17,14 +17,14 @@ HTTP/1.1 201
 header "Location" matches "^http:\/\/localhost:8080\/v1\/fragments\/[A-Za-z0-9_-]+$"
 jsonpath "$.status" == "ok"
 # Our fragment ids use UUIDs, see https://ihateregex.io/expr/uuid/
-jsonpath "$.fragments.id" matches "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+jsonpath "$.fragment.id" matches "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
 # Our ownerId hash is a hex encoded string
-jsonpath "$.fragments.ownerId" matches "^[0-9a-fA-F]+$"
+jsonpath "$.fragment.ownerId" matches "^[0-9a-fA-F]+$"
 # Basic check for the presence of created and updated date strings.
 # You could also write a regex for this and use matches
-jsonpath "$.fragments.created" isString
-jsonpath "$.fragments.updated" isString
-jsonpath "$.fragments.type" == "application/json"
+jsonpath "$.fragment.created" isString
+jsonpath "$.fragment.updated" isString
+jsonpath "$.fragment.type" == "application/json"
 # Capture the Location URL into a variable named `fragment1_url`
 # Capture the fragment id into a variable named `fragment1_id`
 [Captures]
