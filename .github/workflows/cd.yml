@@ -93,10 +93,10 @@ jobs:
             API_URL=http://ec2co-ecsel-ul5jk25ytlrw-420271601.us-east-1.elb.amazonaws.com:8080/
             HTPASSWD_FILE=tests/.htpasswd
             PORT=8080
-        - name: Deploy Amazon ECS task definition
-          uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-          with:
-            task-definition: ${{ steps.update-task-def.outputs.task-definition }}
-            cluster: fragments-cluster
-            service: fragments-service
-            wait-for-service-stability: true
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.update-task-def.outputs.task-definition }}
+          cluster: fragments-cluster
+          service: fragments-service
+          wait-for-service-stability: true
