@@ -9,7 +9,7 @@ const { PutCommand, GetCommand, QueryCommand, DeleteCommand } = require('@aws-sd
 // const data = new MemoryDB();
 // const metadata = new MemoryDB();
 
-// Write a fragment's metadata to memory db. Returns a Promise
+// Writes a fragment to DynamoDB. Returns a Promise.
 function writeFragment(fragment) {
   // Configure our PUT params, with the name of the table and item (attributes and keys)
   const params = {
@@ -28,7 +28,7 @@ function writeFragment(fragment) {
   }
 }
 
-// Read a fragment's metadata from memory db. Returns a Promise
+// Reads a fragment from DynamoDB. Returns a Promise<fragment|undefined>
 async function readFragment(ownerId, id) {
   // Configure our GET params, with the name of the table and key (partition key + sort key)
   const params = {
@@ -132,7 +132,8 @@ async function readFragmentData(ownerId, id) {
   }
 }
 
-// Get a list of fragment ids/objects for the given user from memory db. Returns a Promise
+// Get a list of fragments, either ids-only, or full Objects, for the given user.
+// Returns a Promise<Array<Fragment>|Array<string>|undefined>
 async function listFragments(ownerId, expand = false) {
   // Configure our QUERY params, with the name of the table and the query expression
   const params = {
