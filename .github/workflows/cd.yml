@@ -85,10 +85,9 @@ jobs:
             LOG_LEVEL=info
             NODE_ENV=production
 
-            AWS_REGION=us-east-1
             AWS_COGNITO_POOL_ID=us-east-1_iXwrpnUWw
             AWS_COGNITO_CLIENT_ID=4bbg86f8pfb88l6oc6p6i2tivs
-            API_URL=http://ec2co-ecsel-ul5jk25ytlrw-420271601.us-east-1.elb.amazonaws.com:8080/
+            API_URL=http://ec2co-ecsel-ul5jk25ytlrw-420271601.us-east-1.elb.amazonaws.com:8080
             HTPASSWD_FILE=tests/.htpasswd
             PORT=8080
       - name: Deploy Amazon ECS task definition

@@ -14,7 +14,7 @@
           "awslogs-stream-prefix": "ecs"
         }
       },
-      "entryPoint": null,
+      "entryPoint": [],
       "portMappings": [
         {
           "hostPort": 8080,
@@ -22,49 +22,25 @@
           "containerPort": 8080
         }
       ],
-      "command": null,
+      "command": [],
       "linuxParameters": null,
       "cpu": 256,
       "environment": [
         {
-          "name": "API_URL",
-          "value": "http://ec2co-ecsel-ul5jk25ytlrw-420271601.us-east-1.elb.amazonaws.com:8080/"
+          "name": "HTPASSWD_FILE",
+          "value": "tests/.htpasswd"
         },
         {
-          "name": "AWS_COGNITO_CLIENT_ID",
-          "value": "4bbg86f8pfb88l6oc6p6i2tivs"
-        },
-        {
-          "name": "AWS_COGNITO_POOL_ID",
-          "value": "us-east-1_iXwrpnUWw"
-        },
-        {
-          "name": "AWS_REGION",
-          "value": "us-east-1"
+          "name": "PORT",
+          "value": "8080"
         },
         {
           "name": "AWS_S3_BUCKET_NAME",
           "value": "dpatel425-fragments"
         },
         {
-          "name": "HTPASSWD_FILE",
-          "value": "tests/.htpasswd"
-        },
-        {
-          "name": "LOG_LEVEL",
-          "value": "info"
-        },
-        {
-          "name": "NODE_ENV",
-          "value": "production"
-        },
-        {
-          "name": "PORT",
-          "value": "8080"
-        },
-        {
-          "name": "PORT",
-          "value": "8080"
+          "name": "AWS_REGION",
+          "value": "us-east-1"
         },
         {
           "name": "AWS_DYNAMODB_TABLE_NAME",
@@ -82,7 +58,7 @@
       "memoryReservation": 512,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "008604384557.dkr.ecr.us-east-1.amazonaws.com/fragments:v0.9.0",
+      "image": "dpatel425/fragments:latest",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -90,7 +66,7 @@
       "interactive": null,
       "healthCheck": null,
       "essential": true,
-      "links": null,
+      "links": [],
       "hostname": null,
       "extraHosts": null,
       "pseudoTerminal": null,
@@ -106,7 +82,7 @@
   "memory": "512",
   "taskRoleArn": "arn:aws:iam::008604384557:role/LabRole",
   "compatibilities": ["EC2", "FARGATE"],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:008604384557:task-definition/fragments-tast:3",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:008604384557:task-definition/fragments-tast:1",
   "family": "fragments-tast",
   "requiresAttributes": [
     {
@@ -125,12 +101,6 @@
       "targetId": null,
       "targetType": null,
       "value": null,
-      "name": "com.amazonaws.ecs.capability.ecr-auth"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
     },
     {
@@ -138,18 +108,6 @@
       "targetType": null,
       "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.task-iam-role"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.execution-role-ecr-pull"
     },
     {
       "targetId": null,
@@ -169,7 +127,7 @@
   "networkMode": "awsvpc",
   "runtimePlatform": null,
   "cpu": "256",
-  "revision": 3,
+  "revision": 1,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
