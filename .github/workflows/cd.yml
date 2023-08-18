@@ -84,9 +84,7 @@ jobs:
           environment-variables: |
             LOG_LEVEL=info
             NODE_ENV=production
-            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_SESSION_TOKEN=${{ secrets.AWS_SESSION_TOKEN }}
+
             AWS_REGION=us-east-1
             AWS_COGNITO_POOL_ID=us-east-1_iXwrpnUWw
             AWS_COGNITO_CLIENT_ID=4bbg86f8pfb88l6oc6p6i2tivs

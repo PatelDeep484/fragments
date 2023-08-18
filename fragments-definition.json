@@ -37,6 +37,10 @@
         {
           "name": "PORT",
           "value": "8080"
+        },
+        {
+          "name": "AWS_S3_BUCKET_NAME",
+          "value": "dpatel425-fragments"
         }
       ],
       "resourceRequirements": null,
@@ -72,7 +76,7 @@
   ],
   "placementConstraints": [],
   "memory": "512",
-  "taskRoleArn": null,
+  "taskRoleArn": "arn:aws:iam::008604384557:role/LabRole",
   "compatibilities": ["EC2", "FARGATE"],
   "taskDefinitionArn": "arn:aws:ecs:us-east-1:008604384557:task-definition/fragments-tast:1",
   "family": "fragments-tast",
