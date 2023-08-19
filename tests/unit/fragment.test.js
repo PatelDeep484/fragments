@@ -155,7 +155,36 @@ describe('Fragment class', () => {
         type: 'text/plain; charset=utf-8',
         size: 0,
       });
+      const markdownFragment = new Fragment({
+        ownerId: '1234',
+        type: 'text/markdown',
+        size: 0,
+      });
+
+      const htmlFragment = new Fragment({
+        ownerId: '1234',
+        type: 'text/html',
+        size: 0,
+      });
       expect(fragment.isText).toBe(true);
+      expect(markdownFragment.isText).toBe(true);
+      expect(htmlFragment.isText).toBe(true);
+    });
+    test('isText returns false for non-text types', () => {
+      const jsonFragment = new Fragment({
+        ownerId: '1234',
+        type: 'application/json',
+        size: 0,
+      });
+
+      const imageFragment = new Fragment({
+        ownerId: '1234',
+        type: 'image/png',
+        size: 0,
+      });
+
+      expect(jsonFragment.isText).toBe(false);
+      expect(imageFragment.isText).toBe(false);
     });
   });
 
@@ -168,8 +197,137 @@ describe('Fragment class', () => {
       });
       expect(fragment.formats).toEqual(['text/plain']);
     });
-  });
 
+    test('formats returns the expected result for markdown', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'text/markdown',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['text/plain', 'text/markdown', 'text/html']);
+    });
+
+    test('formats returns the expected result for HTML', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'text/html',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['text/plain', 'text/html']);
+    });
+
+    test('formats returns the expected result for JSON', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'application/json',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['application/json', 'text/plain']);
+    });
+
+    test('formats returns the expected result for image/png', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'image/png',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['image/png', 'image/jpeg', 'image/gif', 'image/webp']);
+    });
+    test('formats returns the expected result for image/jpeg', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'image/jpeg',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['image/png', 'image/jpeg', 'image/gif', 'image/webp']);
+    });
+    test('formats returns the expected result for image/gif', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'image/gif',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['image/png', 'image/jpeg', 'image/gif', 'image/webp']);
+    });
+    test('formats returns the expected result for image/webp', () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'image/webp',
+        size: 0,
+      });
+      expect(fragment.formats).toEqual(['image/png', 'image/jpeg', 'image/gif', 'image/webp']);
+    });
+  });
+  describe('convertTo()', () => {
+    test('converts text/markdown to text/html', async () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'text/markdown',
+        size: 0,
+      });
+
+      const inputData = '# Hello, world!';
+      const expectedOutput = '<h1>Hello, world!</h1>';
+
+      const convertedData = await fragment.convertTo(Buffer.from(inputData), 'html');
+      expect(convertedData.toString()).toContain(expectedOutput);
+    });
+
+    test('converts text/markdown to text/plain', async () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'text/markdown',
+        size: 0,
+      });
+
+      const inputData = '# Hello, world!';
+      const expectedOutput = '# Hello, world!';
+
+      const convertedData = await fragment.convertTo(Buffer.from(inputData), 'txt');
+      expect(convertedData.toString()).toEqual(expectedOutput);
+    });
+
+    test('converts text/html to text/plain', async () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'text/html',
+        size: 0,
+      });
+
+      const inputData = '<h1>Hello, world!</h1>';
+      const expectedOutput = 'Hello, world!';
+
+      const convertedData = await fragment.convertTo(Buffer.from(inputData), 'txt');
+      expect(convertedData.toString()).toEqual(expectedOutput);
+    });
+
+    test('converts application/json to text/plain', async () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'application/json',
+        size: 0,
+      });
+
+      const inputData = '{"key": "value", "foo": "bar"}';
+      const expectedOutput = 'key: value, foo: bar';
+
+      const convertedData = await fragment.convertTo(Buffer.from(inputData), 'txt');
+      expect(convertedData.toString()).toEqual(expectedOutput);
+    });
+    test('converts application/json to text/plain', async () => {
+      const fragment = new Fragment({
+        ownerId: '1234',
+        type: 'application/json',
+        size: 0,
+      });
+
+      const inputData = '{"key": "value", "foo": "bar"}';
+      const expectedOutput = 'key: value, foo: bar';
+
+      const convertedData = await fragment.convertTo(Buffer.from(inputData), 'txt');
+      expect(convertedData.toString()).toEqual(expectedOutput);
+    });
+  });
   describe('save(), getData(), setData(), byId(), byUser(), delete()', () => {
     test('byUser() returns an empty array if there are no fragments for this user', async () => {
       expect(await Fragment.byUser('1234')).toEqual([]);
